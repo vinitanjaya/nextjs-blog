@@ -1,28 +1,38 @@
-import Head from 'next/head';
-import Layout, { siteTitle } from '../components/layout';
-import utilStyles from '../styles/utils.module.css';
-import { getSortedPostsData } from '../lib/posts';
-import Link from 'next/link';
-import Date from '../components/date';
+import Head from 'next/head'
+import Layout, { siteTitle } from '../components/layout'
+import utilStyles from '../styles/utils.module.css'
+import { getSortedPostsData } from '../lib/posts'
+import Link from 'next/link'
+import Date from '../components/date'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { setPosts } from '../store/slices/postsSlice'
 
 export async function getStaticProps() {
-  const allPostsData = getSortedPostsData();
+  const allPostsData = getSortedPostsData()
   return {
     props: {
       allPostsData,
     },
-  };
-} 
+  }
+}
 
 export default function Home({ allPostsData }) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setPosts(allPostsData))
+  }, [dispatch, allPostsData])
+
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
+
       <section className={utilStyles.headingMd}>
         <p>[Your Self Introduction]</p>
-        <p>Versi Preview dari branch feature/preiview-home</p>
+        <p>Versi Preview dari branch feature/preview-home</p>
         <p>
           (This is a sample website - you’ll be building a site like this on{' '}
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
@@ -44,5 +54,5 @@ export default function Home({ allPostsData }) {
         </ul>
       </section>
     </Layout>
-  );
+  )
 }
